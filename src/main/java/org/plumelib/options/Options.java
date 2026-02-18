@@ -36,6 +36,8 @@ import org.checkerframework.checker.formatter.qual.FormatMethod;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.modifiability.qual.Modifiable;
+import org.checkerframework.checker.modifiability.qual.Growable;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -394,7 +396,7 @@ public class Options {
      * Maps names of enum constants to their corresponding Javadoc. This is used by OptionsDoclet to
      * generate documentation for enum-type options. Null if the baseType is not an Enum.
      */
-    @MonotonicNonNull Map<String, String> enumJdoc;
+    @Modifiable @MonotonicNonNull Map<String, String> enumJdoc;
 
     /**
      * Name of the argument type. Defaults to the type of the field, but user can override this in
@@ -415,7 +417,7 @@ public class Options {
     boolean noDocDefault;
 
     /** If the option is a list, this references that list. */
-    @MonotonicNonNull List<Object> list = null;
+    @Growable @MonotonicNonNull List<Object> list = null;
 
     /** Constructor that takes one String for the type. */
     @Nullable Constructor<?> constructor = null;
@@ -513,7 +515,7 @@ public class Options {
           defaultStr = null;
         }
         @SuppressWarnings("unchecked")
-        List<Object> defaultObjAsList = (List<Object>) defaultObj;
+        @Growable List<Object> defaultObjAsList = (List<Object>) defaultObj;
         this.list = defaultObjAsList;
         // System.out.printf ("list default = %s%n", list);
         Type[] listTypeArgs = pt.getActualTypeArguments();
@@ -632,7 +634,7 @@ public class Options {
     boolean unpublicized;
 
     /** List of options that belong to this group. */
-    List<OptionInfo> optionList;
+    @Modifiable List<OptionInfo> optionList;
 
     /**
      * Create a new option group.
