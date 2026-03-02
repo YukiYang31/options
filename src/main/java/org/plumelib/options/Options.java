@@ -38,6 +38,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.modifiability.qual.Modifiable;
 import org.checkerframework.checker.modifiability.qual.Growable;
+import org.checkerframework.checker.modifiability.qual.Shrinkable;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -420,7 +421,7 @@ public class Options {
      * If the option is a list, this references that list. This value is side-effected rather than
      * the field being set.
      */
-    @Growable @MonotonicNonNull List<Object> list = null;
+    @Growable @Shrinkable @MonotonicNonNull List<Object> list = null;
 
     /**
      * If true, the {@link #list} field is set to the default value. If false, it contains
@@ -515,7 +516,7 @@ public class Options {
           defaultStr = null;
         }
         @SuppressWarnings("unchecked")
-        @Growable List<Object> defaultObjAsList = (List<Object>) defaultObj;
+        List<Object> defaultObjAsList = (List<Object>) defaultObj;
         if (!isModifiable(defaultObjAsList)) {
           defaultObjAsList = new ArrayList<>(defaultObjAsList);
           fieldSet(field, obj, defaultObjAsList);
