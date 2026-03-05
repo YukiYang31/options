@@ -36,8 +36,8 @@ import org.checkerframework.checker.formatter.qual.FormatMethod;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.modifiability.qual.Modifiable;
 import org.checkerframework.checker.modifiability.qual.Growable;
+import org.checkerframework.checker.modifiability.qual.Modifiable;
 import org.checkerframework.checker.modifiability.qual.Shrinkable;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -521,7 +521,11 @@ public class Options {
           defaultObjAsList = new ArrayList<>(defaultObjAsList);
           fieldSet(field, obj, defaultObjAsList);
         }
-        this.list = defaultObjAsList;
+        @SuppressWarnings({"Growable:assignment", "Shrinkable:assignment"})
+        @Growable
+        @Shrinkable
+        List<Object> growableShrinkableList = defaultObjAsList;
+        this.list = growableShrinkableList;
 
         // System.out.printf ("list default = %s%n", list);
         Type[] listTypeArgs = pt.getActualTypeArguments();
