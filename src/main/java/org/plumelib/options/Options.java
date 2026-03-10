@@ -46,6 +46,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signedness.qual.Signed;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.framework.qual.EnsuresQualifierIf;
 
 /**
  * The Options class:
@@ -521,11 +522,7 @@ public class Options {
           defaultObjAsList = new ArrayList<>(defaultObjAsList);
           fieldSet(field, obj, defaultObjAsList);
         }
-        @SuppressWarnings({"Growable:assignment", "Shrinkable:assignment"})
-        @Growable
-        @Shrinkable
-        List<Object> growableShrinkableList = defaultObjAsList;
-        this.list = growableShrinkableList;
+        this.list = defaultObjAsList;
 
         // System.out.printf ("list default = %s%n", list);
         Type[] listTypeArgs = pt.getActualTypeArguments();
@@ -1851,6 +1848,11 @@ public class Options {
    * @param c a collection defined in the JDK
    * @return true if the collection is modifiable
    */
+  @SuppressWarnings({"Growable:contracts.conditional.postcondition",
+  "Replaceable:contracts.conditional.postcondition",
+  "Shrinkable:contracts.conditional.postcondition"
+  })
+  @EnsuresQualifierIf(result = true, expression = "#1", qualifier = Modifiable.class)
   static boolean isModifiable(Collection<?> c) {
     // This is a hack, but I don't know how else to implement it.
     // This implementation is error-prone because (per the documentation of `Class.getName()`)
