@@ -324,13 +324,13 @@ public class Options {
 
   /** List of all of the defined options. */
   @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
-  private final List<OptionInfo> options = new ArrayList<>();
+  private final @Modifiable List<OptionInfo> options = new ArrayList<>();
 
   /** Map from short or long option names (with leading dashes) to option information. */
-  private final Map<String, OptionInfo> nameToOption = new LinkedHashMap<>();
+  private final @Modifiable Map<String, OptionInfo> nameToOption = new LinkedHashMap<>();
 
   /** Map from option group name to option group information. */
-  private final Map<String, OptionGroupInfo> groupNameToOptionGroup = new LinkedHashMap<>();
+  private final @Modifiable Map<String, OptionGroupInfo> groupNameToOptionGroup = new LinkedHashMap<>();
 
   /**
    * If true, then the user is using {@code @OptionGroup} annotations correctly (as per the
