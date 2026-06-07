@@ -39,6 +39,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.modifiability.qual.Growable;
 import org.checkerframework.checker.modifiability.qual.Modifiable;
 import org.checkerframework.checker.modifiability.qual.Shrinkable;
+import org.checkerframework.checker.modifiability.qual.IteratorPolyMod;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -423,7 +424,7 @@ public class Options {
      * If the option is a list, this references that list. This value is side-effected rather than
      * the field being set.
      */
-    @Growable @Shrinkable @MonotonicNonNull List<Object> list = null;
+    @Growable @Shrinkable @IteratorPolyMod @MonotonicNonNull List<Object> list = null;
 
     /**
      * If true, the {@link #list} field is set to the default value. If false, it contains
@@ -641,7 +642,7 @@ public class Options {
     boolean unpublicized;
 
     /** List of options that belong to this group. */
-    @Modifiable List<OptionInfo> optionList;
+    @Modifiable @IteratorPolyMod List<OptionInfo> optionList;
 
     /**
      * Create a new option group.
@@ -1837,11 +1838,12 @@ public class Options {
    * @param c a collection defined in the JDK
    * @return true if the collection is modifiable
    */
-  @SuppressWarnings({"Growable:contracts.conditional.postcondition",
-  "Replaceable:contracts.conditional.postcondition",
-  "Shrinkable:contracts.conditional.postcondition"
+  @SuppressWarnings({"modifiability:contracts.conditional.postcondition",
+  "iterator:contracts.conditional.postcondition",
   })
-  @EnsuresQualifierIf(result = true, expression = "#1", qualifier = Modifiable.class)
+  @EnsuresQualifierIf(result = true, expression = "#1", qualifier = IteratorPolyMod.class)
+  @EnsuresQualifierIf(result = true, expression = "#1", qualifier = Growable.class)
+  @EnsuresQualifierIf(result = true, expression = "#1", qualifier = Shrinkable.class)
   static boolean isModifiable(Collection<?> c) {
     // This is a hack, but I don't know how else to implement it.
     // This implementation is error-prone because (per the documentation of `Class.getName()`)
